@@ -6,6 +6,7 @@ export type StatusType = 'todo' | 'doing' | 'done' | 'blocked';
 export interface InlineStatusBadgesSettings {
 	enableBadges: boolean;
 	labels: Record<StatusType, string>;
+	customKeywords: Array<{ keyword: string; status: StatusType }>;
 }
 
 export const DEFAULT_SETTINGS: InlineStatusBadgesSettings = {
@@ -16,6 +17,7 @@ export const DEFAULT_SETTINGS: InlineStatusBadgesSettings = {
 		done: 'DONE',
 		blocked: 'BLOCKED',
 	},
+	customKeywords: [],
 };
 
 export class InlineStatusBadgesSettingTab extends PluginSettingTab {
@@ -80,6 +82,83 @@ export class InlineStatusBadgesSettingTab extends PluginSettingTab {
 					this.plugin.settings.labels.blocked = value || 'BLOCKED';
 					await this.plugin.saveSettings();
 				}))
+		;
+
+		// Custom keywords section
+		containerEl.createEl('h3', { text: 'Palabras clave personalizadas' });
+		containerEl.createEl('p', {
+			text: 'Agrega palabras clave adicionales que serán detectadas como badges.',
+		});
+
+		// Display existing custom keywords
+		this.plugin.settings.customKeywords.forEach((item, index) => {
+			const container = containerEl.createDiv('custom-keyword-row');
+			container.style.display = 'flex';
+			container.style.gap = '8px';
+			container.style.marginBottom = '8px';
+
+			new Setting(container)
+				.addText((text) =>
+					text
+						.setPlaceholder('Palabra clave (ej: #custom)')
+						.setValue(item.keyword)
+						.onChange(async (value) => {
+							const keyword = this.plugin.settings.customKeywords[index];
+							if (keyword) {
+								keyword.keyword = value;
+								await this.plugin.saveSettings();
+							}
+						})
+				)
+				.setClass('custom-keyword-input');
+
+			new Setting(container)
+				.addDropdown((dropdown) =>
+					dropdown
+						.addOption('todo', 'TODO')
+						.addOption('doing', 'DOING')
+						.addOption('done', 'DONE')
+						.addOption('blocked', 'BLOCKED')
+						.setValue(item.status)
+						.onChange(async (value: string) => {
+							const keyword = this.plugin.settings.customKeywords[index];
+							if (keyword) {
+								keyword.status = value as StatusType;
+								await this.plugin.saveSettings();
+							}
+						})
+				)
+				.setClass('custom-keyword-dropdown');
+
+			new Setting(container)
+				.addButton((button) =>
+					button
+						.setButtonText('Eliminar')
+						.setWarning()
+						.onClick(async () => {
+							this.plugin.settings.customKeywords.splice(index, 1);
+							await this.plugin.saveSettings();
+							this.display();
+						})
+				)
+				.setClass('custom-keyword-remove');
+		});
+
+		// Add new custom keyword
+		new Setting(containerEl)
+			.addButton((button) =>
+				button
+					.setButtonText('+ Agregar palabra clave')
+					.setCta()
+					.onClick(async () => {
+						this.plugin.settings.customKeywords.push({
+							keyword: '',
+							status: 'todo',
+						});
+						await this.plugin.saveSettings();
+						this.display();
+					})
+			)
 		;
 	}
 }
