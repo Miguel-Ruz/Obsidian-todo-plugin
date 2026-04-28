@@ -37,3 +37,7 @@ Un plugin para Obsidian que detecta tokens de estado en el contenido markdown re
 Accede a Configuración → Plugins → Inline Status Badges para:
 - Activar o desactivar los badges
 - Personalizar el texto de las etiquetas (ej: "En progreso" en lugar de "DOING")
+- **Agregar palabras clave personalizadas**: Puedes añadir tus propias palabras clave que serán detectadas como badges. Para cada palabra clave:
+  - Especifica la palabra clave (ej: `#custom`, `@status`, etc.)
+  - Selecciona el estado asociado (TODO, DOING, DONE, BLOCKED)
+  - Usa el botón "Eliminar" para remover palabras clave personalizadas
