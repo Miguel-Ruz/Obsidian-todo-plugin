@@ -1,0 +1,31 @@
+.status-badge {
+	border-radius: 999px;
+	padding: 2px 8px;
+	font-size: 12px;
+	font-weight: 600;
+	margin-left: 4px;
+	display: inline-flex;
+	align-items: center;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.status-todo {
+	background: #909399;
+	color: white;
+}
+
+.status-doing {
+	background: #2f80ed;
+	color: white;
+}
+
+.status-done {
+	background: #2f855a;
+	color: white;
+}
+
+.status-blocked {
+	background: #d93f3f;
+	color: white;
+}

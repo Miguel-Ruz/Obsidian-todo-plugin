@@ -1,0 +1,9 @@
+{
+	"id": "inline-status-badges",
+	"name": "Inline Status Badges",
+	"version": "0.1.0",
+	"minAppVersion": "0.15.0",
+	"description": "Detecta tokens de estado en markdown renderizado y los reemplaza por badges visuales.",
+	"author": "Inline Status Badges",
+	"isDesktopOnly": false
+}
